@@ -29,7 +29,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     SharedModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, AuthComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

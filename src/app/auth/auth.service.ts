@@ -8,6 +8,7 @@ import { User } from "./user.model";
 @Injectable({ providedIn: 'root' })
 export class AuthService{
     user = new BehaviorSubject<User>(null!);
+    error = new BehaviorSubject<string>('');
 
     private tokenExpirationTimer: any;
 
@@ -16,8 +17,7 @@ export class AuthService{
     register (user: User) {
         return this.http.post<AuthResponseData>('http://localhost:3000/users', { userName: user.userName, password: user.password, email: user.email, token: user.userName + 'Token', tokenExpirationTimer: 1000 })
         .pipe(catchError(this.handleError), tap(resData => {
-            //console.log(resData)
-            this.handleAuthentication({userName: resData.userName, password: resData.password, email: resData.email})
+            resData && this.handleAuthentication({userName: resData.userName, password: resData.password, email: resData.email})
         }));
     }
     
@@ -34,14 +34,16 @@ export class AuthService{
             });
             if (resUser) {
                 //alert('Welcome back ' + resUser.userName);
+                this.error.next('')
             }
             else {
-                alert('Invalid credentials!');
+                this.error.next('Invalid credentials!')
+                //alert('Invalid credentials!');
             }
             return resUser;
         }),
         catchError(this.handleError), tap(resData => {
-            this.handleAuthentication({userName: resData.userName, token: resData.token, tokenExpirationTimer: resData.tokenExpirationTimer})
+            resData && this.handleAuthentication({userName: resData.userName, token: resData.token, tokenExpirationTimer: resData.tokenExpirationTimer})
         }));
     }
 

@@ -1,7 +1,6 @@
 <form class="d-flex gap-2" role="user">
-    <button *ngIf="!logedin" type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-    <button *ngIf="!logedin" type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+    <button *ngIf="!logedin" type="button" class="btn btn-outline-light" (click)="onLogin()">Login</button>
+    <button *ngIf="!logedin" type="button" class="btn btn-outline-light" (click)="onRegister()">Register</button>
+    <p *ngIf="logedin" class="text-light fs-6 fw-medium position-absolute top-50 start-50 translate-middle">Welcome {{ user }}</p>
     <button *ngIf="logedin" type="button" class="btn btn-outline-danger" (click)="onLogout()">Logout</button>
-  </form>
-<app-modal functionality="login" [inputs]="['username', 'password']" (onSubmitData)="onLogin($event)"> </app-modal>
-<app-modal functionality="register" [inputs]="['username', 'password', 'email']" (onSubmitData)="onRegister($event)"> </app-modal>
+ </form>

@@ -1,46 +1,49 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { take } from 'rxjs';
+import { AuthComponent } from 'src/app/auth/auth.component';
 
-import { AlertComponent } from "../alert/alert.component";
-import { PlaceholderDirective } from "../placeholder/placeholder.directive";
 
 @Component({
     selector:'app-modal',
     templateUrl: './modal.component.html',
     styleUrls: ['./modal.component.css']
 })
-
 export class ModalComponent {
     @Input() functionality: string = '';
     @Input() inputs: string[] = [];
+    @Input() error: string = '';
+    @Input() logedin: boolean = false;
+    @Input() parentRef!: AuthComponent;
     @Output() onSubmitData = new EventEmitter<ModalData>();
-    @ViewChild(PlaceholderDirective) alertHost!: PlaceholderDirective;
 
-    private closeSub: Subscription = new Subscription;
+    message: string = '';
 
-    constructor() {}
+	constructor(public activeModal: NgbActiveModal) {}
 
     onSubmit(form: NgForm) {
+        this.error = '';
         this.onSubmitData.emit({ 
             functionality: this.functionality,
             data: Object.entries<string>(form.value).map((parameter) => {
                 return { parameter: parameter[0], value: parameter[1] }
             })
         });
-    }
-    
-    showErrorAlert(message: string) {
-        //const alertFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
-        const hostViwContainerRef = this.alertHost.viewContainerRef;
-    
-        hostViwContainerRef.clear();
-        const componentRef = hostViwContainerRef.createComponent(AlertComponent);
-        componentRef.instance.message = message;
-        this.closeSub = componentRef.instance.close.subscribe(() => {
-            this.closeSub.unsubscribe();
-            hostViwContainerRef.clear();
-        });
+        this.parentRef.loggedin.pipe(take(1)).subscribe(e => {
+            if (e) {
+                form.reset();
+                this.activeModal.close('Modal Submit')
+            }
+            else {
+                this.parentRef.error.pipe(take(1)).subscribe(e => {
+                    this.error = e;
+                })
+            }
+        })
+        this.parentRef.message.pipe(take(1)).subscribe(e => {
+            this.message = e;
+        })
     }
 }
 

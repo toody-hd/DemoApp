@@ -1,26 +1,35 @@
-<div class="modal fade text-white" id="{{functionality}}Modal" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
-    <div class="modal-dialog">
-      <form class="modal-content" #authForm="ngForm" (ngSubmit)="onSubmit(authForm);authForm.reset()">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="{{functionality}}ModalLabel">{{functionality | titlecase}}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="authForm.reset()"></button>
+<form #modalForm="ngForm" data-bs-theme="dark" style="background-color: #292b2c; color: white;" (ngSubmit)="onSubmit(modalForm)">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" id="{{functionality}}ModalLabel">{{functionality | titlecase}}</h1>
+    <button type="button" class="btn-close" aria-label="Close"
+      (click)="modalForm.reset();activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-danger" *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
+    <div class="mb-3 form-floating" *ngFor="let input of inputs">
+      <input *ngIf="input !='password' && input != 'email'" type="text" class="form-control" ngModel required
+        tabindex="-1" ngbAutofocus minlength="3" name="{{functionality}}.{{input}}" placeholder="{{input | titlecase}}"
+        id="{{functionality}}.{{input}}">
+      <input *ngIf="input =='password'" type="password" class="form-control" placeholder="Password" ngModel required
+        minlength="4" name="{{functionality}}.{{input}}" id="{{functionality}}.{{input}}">
+      <div *ngIf="input =='email'" class="input-group input-group-lg">
+        <span class="input-group-text" id="email">@</span>
+        <div class="form-floating">
+          <input type="email" class="form-control" placeholder="Email" aria-label="Email" ngModel required email
+          aria-describedby="email" name="{{functionality}}.{{input}}" id="{{functionality}}.{{input}}">
+          <label for="{{functionality}}.{{input}}">Email</label>
         </div>
-        <div class="modal-body">
-          <div>
-            <div class="mb-3 form-floating" *ngFor="let input of inputs">
-                <input *ngIf="input !='password' && input != 'email'" type="text" class="form-control" ngModel required minlength="3" name="{{functionality}}.{{input}}" placeholder="{{input | titlecase}}" id="{{functionality}}.{{input}}">
-                <input *ngIf="input =='password'" type="password" class="form-control" placeholder="Password" ngModel required minlength="4" name="{{functionality}}.{{input}}"  id="{{functionality}}.{{input}}">
-                <div *ngIf="input =='email'" class="input-group input-group-lg">
-                  <span class="input-group-text" id="email">@</span>
-                  <input type="email" class="form-control" placeholder="Email" aria-label="Email" ngModel required email aria-describedby="email" name="{{functionality}}.{{input}}"  id="{{functionality}}.{{input}}">
-                </div>
-                <label *ngIf="input !='email'" for="{{functionality}}.{{input}}" class="col-form-label">{{input | titlecase}}</label>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-outline-light" data-bs-dismiss="modal" [disabled]="!authForm.valid">{{functionality | titlecase}}</button>
-        </div>
-      </form>
+      </div>
+      <label *ngIf="input !='email'" for="{{functionality}}.{{input}}" class="col-form-label">
+        {{input | titlecase}}
+      </label>
     </div>
   </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-light" [disabled]="!modalForm.valid">
+      {{functionality | titlecase}}
+    </button>
+  </div>
+</form>

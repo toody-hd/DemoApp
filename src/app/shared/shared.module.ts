@@ -2,27 +2,34 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AlertComponent } from "./alert/alert.component";
 import { ModalComponent } from "./modal/modal.component";
 import { PlaceholderDirective } from "./placeholder/placeholder.directive";
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
     declarations: [
         AlertComponent,
+        PlaceholderDirective,
         ModalComponent,
-        PlaceholderDirective
+        ToastComponent
     ],
     imports: [
+        FormsModule,
         CommonModule,
-        FormsModule
+        NgbModule
     ],
     providers: [
-        ModalComponent
+        ModalComponent,
+        ToastComponent,
+        CommonModule
     ],
     exports: [
         AlertComponent,
-        ModalComponent,
         PlaceholderDirective,
+        ModalComponent,
+        ToastComponent,
         CommonModule
     ]
 })
