@@ -32,5 +32,304 @@
       "token": "adminToken",
       "tokenExpirationTimer": 1000
     }
+  ],
+  "categories": [
+    {
+      "id": 0,
+      "name": "Starter"
+    },
+    {
+      "id": 1,
+      "name": "Main"
+    },
+    {
+      "id": 2,
+      "name": "Side"
+    },
+    {
+      "id": 3,
+      "name": "Desert"
+    },
+    {
+      "id": 4,
+      "name": "Drinks"
+    }
+  ],
+  "products": [
+    {
+      "id": 0,
+      "type": 0,
+      "name": "Soup of the day",
+      "ingredients": [
+        0,6,7,9,10,11
+      ]
+    },
+    {
+      "id": 1,
+      "type": 0,
+      "name": "Tomato Soup",
+      "ingredients": [
+        0,10,11
+      ]
+    },
+    {
+      "id": 2,
+      "type": 0,
+      "name": "Noodles Soup",
+      "ingredients": [
+        9,6,10,11
+      ]
+    },
+    {
+      "id": 3,
+      "type": 0,
+      "name": "Chicken Soup",
+      "ingredients": [
+        6,7,10,11
+      ]
+    },
+    {
+      "id": 4,
+      "type": 1,
+      "name": "T-Bone Steak",
+      "ingredients": [
+        5,10,11
+      ]
+    },
+    {
+      "id": 5,
+      "type": 1,
+      "name": "Cheese Burger",
+      "ingredients": [
+        2,14,12,13,0,3,4,15,10,11
+      ]
+    },
+    {
+      "id": 6,
+      "type": 2,
+      "name": "French Fries",
+      "ingredients": [
+        13,10,3
+      ]
+    },
+    {
+      "id": 7,
+      "type": 2,
+      "name": "White Rice",
+      "ingredients": [
+        16,6,10
+      ]
+    },
+    {
+      "id": 8,
+      "type": 2,
+      "name": "Brown Rice",
+      "ingredients": [
+        17,6,10
+      ]
+    },
+    {
+      "id": 9,
+      "type": 2,
+      "name": "Potatoes",
+      "ingredients": [
+        1,10
+      ]
+    },
+    {
+      "id": 10,
+      "type": 3,
+      "name": "Lava Cake",
+      "ingredients": [
+        18,19,20,21
+      ]
+    },
+    {
+      "id": 11,
+      "type": 3,
+      "name": "Crème Brûlée",
+      "ingredients": [
+        22,23,24,20,21
+      ]
+    },
+    {
+      "id": 12,
+      "type": 4,
+      "name": "Local Beer",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 13,
+      "type": 4,
+      "name": "Crafted Beer",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 14,
+      "type": 4,
+      "name": "Weat Beer",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 15,
+      "type": 4,
+      "name": "Red Wine",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 16,
+      "type": 4,
+      "name": "White Wine",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 17,
+      "type": 4,
+      "name": "Tea",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 18,
+      "type": 4,
+      "name": "Espresso",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 19,
+      "type": 4,
+      "name": "Coffee",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 20,
+      "type": 4,
+      "name": "Capucino",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 21,
+      "type": 4,
+      "name": "Flat White",
+      "ingredients": [
+      ]
+    },
+    {
+      "id": 22,
+      "type": 4,
+      "name": "Fresh",
+      "ingredients": [
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "id": 0,
+      "name": "Tomatoes"
+    },
+    {
+      "id": 1,
+      "name": "Potatoes"
+    },
+    {
+      "id": 2,
+      "name": "Burger Buns"
+    },
+    {
+      "id": 3,
+      "name": "Ketchup"
+    },
+    {
+      "id": 4,
+      "name": "Mustard"
+    },
+    {
+      "id": 5,
+      "name": "Steak"
+    },
+    {
+      "id": 6,
+      "name": "Carrots"
+    },
+    {
+      "id": 7,
+      "name": "Chicken"
+    },
+    {
+      "id": 8,
+      "name": "Chicken Breast"
+    },
+    {
+      "id": 9,
+      "name": "Noodles"
+    },
+    {
+      "id": 10,
+      "name": "Salt"
+    },
+    {
+      "id": 11,
+      "name": "Pepper"
+    },
+    {
+      "id": 12,
+      "name": "Cheese"
+    },
+    {
+      "id": 13,
+      "name": "French Fries"
+    },
+    {
+      "id": 14,
+      "name": "Burger Meat"
+    },
+    {
+      "id": 15,
+      "name": "Pickles"
+    },
+    {
+      "id": 16,
+      "name": "White Rice"
+    },
+    {
+      "id": 17,
+      "name": "Brown Rice"
+    },
+    {
+      "id": 18,
+      "name": "Chocolate"
+    },
+    {
+      "id": 19,
+      "name": "Butter"
+    },
+    {
+      "id": 20,
+      "name": "Eggs"
+    },
+    {
+      "id": 21,
+      "name": "Sugar"
+    },
+    {
+      "id": 22,
+      "name": "Vanilla"
+    },
+    {
+      "id": 23,
+      "name": "Cream"
+    },
+    {
+      "id": 24,
+      "name": "Milk"
+    }
   ]
 }

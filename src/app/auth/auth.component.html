@@ -1,6 +1,6 @@
 <form class="d-flex gap-2" role="user">
     <button *ngIf="!logedin" type="button" class="btn btn-outline-light" (click)="onLogin()">Login</button>
     <button *ngIf="!logedin" type="button" class="btn btn-outline-light" (click)="onRegister()">Register</button>
-    <p *ngIf="logedin" class="text-light fs-6 fw-medium position-absolute top-50 start-50 translate-middle">Welcome {{ user }}</p>
+    <span *ngIf="logedin" class="text-light fs-6 fw-medium position-absolute top-50 start-50 translate-middle">Welcome {{ user }}</span>
     <button *ngIf="logedin" type="button" class="btn btn-outline-danger" (click)="onLogout()">Logout</button>
  </form>

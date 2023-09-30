@@ -1,0 +1,16 @@
+<div class="row row-cols-1 row-cols-md-3 g-4" *ngFor="let category of categories">
+    <div class="col">
+      <div class="card h-100">
+        <img src="" class="card-img-top" alt='{{ category.name }}'>
+        <div class="card-body">
+          <h5 class="card-title">{{ category.name }}</h5>
+        </div>
+        <div class="card-footer">
+          <small class="text-body-secondary"> Products: TO DO (ex. 30) </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h1>Test</h1>
+  <h1>{{categories.length}}</h1>
