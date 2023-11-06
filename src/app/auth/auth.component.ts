@@ -16,8 +16,10 @@ export class AuthComponent implements OnInit, OnDestroy {
   private userSub: Subscription = new Subscription;
   private errorSub: Subscription = new Subscription;
   logedin = false;
+  showLoginToast = false;
+  showLogoutToast = false;
   _error: string = '';
-  
+
   modalRef!: NgbModalRef;
   @Input() user: string = '';
   @Output() loggedin = new EventEmitter<boolean>();
@@ -72,52 +74,58 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
+    this.showLoginToast = false;
+    this.showLogoutToast = true;
     this.authService.logout();
   }
 
   loginUser(data: ModalData["data"]) {
-    this.authService.login({ userName: data[0].value, password: data[1].value, token:'' })
-    .subscribe(
-      {
+    this.authService.login({ userName: data[0].value, password: data[1].value, token: '' })
+      .subscribe(
+        {
           next: (resData) => {
-              this.loggedin.emit(this.logedin);
-              this.message.emit('Successfuly logged in.');
-              this.authService.error.subscribe(error => {
-                  this.error.emit(error);
-              });
-              this.router.navigate(['/']);
+            this.loggedin.emit(this.logedin);
+            this.message.emit('Successfuly logged in.');
+            this.authService.error.subscribe(error => {
+              this.error.emit(error);
+            });
+            this.router.navigate(['/']);
+            this.showLoginToast = true;
+            this.showLogoutToast = false;
           },
           error: (errorMessage) => {
-              this.loggedin.emit(this.logedin);
-              this.message.emit('Fail to log in.');
-              this.authService.error.subscribe(error => {
-                this.error.emit(error);
+            this.loggedin.emit(this.logedin);
+            this.message.emit('Fail to log in.');
+            this.authService.error.subscribe(error => {
+              this.error.emit(error);
             });
+            this.showLoginToast = false;
+            this.showLogoutToast = false;
           }
-      }
-     );
+        }
+      );
   }
 
   registerUser(data: ModalData["data"]) {
-    this.authService.register({userName: data[0].value, password: data[1].value, email: data[2].value, token:''})
-    .subscribe(
+    this.authService.register({ userName: data[0].value, password: data[1].value, email: data[2].value, token: '' })
+      .subscribe(
         {
-            next: (resData) => {
-              this.loggedin.emit(this.logedin);
-              this.message.emit('Successfuly registered.');
-              this.authService.error.subscribe(error => {
-                this.error.emit(error);
+          next: (resData) => {
+            this.loggedin.emit(this.logedin);
+            this.message.emit('Successfuly registered.');
+            this.authService.error.subscribe(error => {
+              this.error.emit(error);
             });
-                this.router.navigate(['/menu']);
-            },
-            error: (errorMessage) => {
-              this.loggedin.emit(this.logedin);
-              this.message.emit('Fail to register.');
-              this.authService.error.subscribe(error => {
-                this.error.emit(error);
+            this.router.navigate(['/menu']);
+          },
+          error: (errorMessage) => {
+            this.loggedin.emit(this.logedin);
+            this.message.emit('Fail to register.');
+            this.authService.error.subscribe(error => {
+              this.error.emit(error);
             });
-            }
+          }
         }
-        );
+      );
   }
 }

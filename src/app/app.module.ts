@@ -30,7 +30,6 @@ import { SharedModule } from './shared/shared.module';
     MenuModule,
     SharedModule
   ],
-  // providers: [AuthService, AuthComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

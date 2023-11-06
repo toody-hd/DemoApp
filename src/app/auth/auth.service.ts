@@ -6,45 +6,42 @@ import { catchError, map, tap } from "rxjs/operators";
 import { User } from "./user.model";
 
 @Injectable({ providedIn: 'root' })
-export class AuthService{
+export class AuthService {
     user = new BehaviorSubject<User>(null!);
     error = new BehaviorSubject<string>('');
 
     private tokenExpirationTimer: any;
 
-    constructor(private http: HttpClient, private router: Router) {}
+    constructor(private http: HttpClient, private router: Router) { }
 
-    register (user: User) {
+    register(user: User) {
         return this.http.post<AuthResponseData>('http://localhost:3000/users', { userName: user.userName, password: user.password, email: user.email, token: user.userName + 'Token', tokenExpirationTimer: 1000 })
-        .pipe(catchError(this.handleError), tap(resData => {
-            resData && this.handleAuthentication({userName: resData.userName, password: resData.password, email: resData.email})
-        }));
+            .pipe(catchError(this.handleError), tap(resData => {
+                resData && this.handleAuthentication({ userName: resData.userName, password: resData.password, email: resData.email })
+            }));
     }
-    
-    login (user: User) {
+
+    login(user: User) {
         let resUser: AuthResponseData = null!;
-        
+
         return this.http.get<AuthResponseData[]>('http://localhost:3000/users')
-        .pipe(map(users => {
-            users.map(_user => {
-                if (_user.userName === user.userName && _user.password === user.password)
-                {
-                    resUser = _user;
+            .pipe(map(users => {
+                users.map(_user => {
+                    if (_user.userName === user.userName && _user.password === user.password) {
+                        resUser = _user;
+                    }
+                });
+                if (resUser) {
+                    this.error.next('')
                 }
-            });
-            if (resUser) {
-                //alert('Welcome back ' + resUser.userName);
-                this.error.next('')
-            }
-            else {
-                this.error.next('Invalid credentials!')
-                //alert('Invalid credentials!');
-            }
-            return resUser;
-        }),
-        catchError(this.handleError), tap(resData => {
-            resData && this.handleAuthentication({userName: resData.userName, token: resData.token, tokenExpirationTimer: resData.tokenExpirationTimer})
-        }));
+                else {
+                    this.error.next('Invalid credentials!')
+                }
+                return resUser;
+            }),
+                catchError(this.handleError), tap(resData => {
+                    resData && this.handleAuthentication({ userName: resData.userName, token: resData.token, tokenExpirationTimer: resData.tokenExpirationTimer })
+                }));
     }
 
     logout() {
@@ -64,17 +61,16 @@ export class AuthService{
         if (!userData) {
             return;
         }
-        const loadedUser = {userName: userData.userName, token: '', password: '', tokenExpirationDate: new Date(userData.tokenExpirationDate)};
-        
+        const loadedUser = { userName: userData.userName, token: '', password: '', tokenExpirationDate: new Date(userData.tokenExpirationDate) };
+
         //if (loadedUser.token) {
-            this.user.next(loadedUser);
-            const expirationDuration = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
-            this.autoLogout(expirationDuration);
+        this.user.next(loadedUser);
+        const expirationDuration = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
+        this.autoLogout(expirationDuration);
         //}
     }
 
     autoLogout(expirationDuration: number) {
-        //console.log(expirationDuration)
         this.tokenExpirationTimer = setTimeout(() => {
             this.logout();
         }, expirationDuration);
@@ -94,16 +90,15 @@ export class AuthService{
     private handleError(errorRes: HttpErrorResponse) {
         let errorMessage = 'An unknown error occurred!';
 
-        if (!errorRes.error || !errorRes.error.error)
-        {
+        if (!errorRes.error || !errorRes.error.error) {
             return throwError(() => new Error(errorMessage))
         }
-        switch(errorRes.error.error.message) {
+        switch (errorRes.error.error.message) {
             case 'EMAIL_EXISTS':
                 errorMessage = 'This emial exists already';
         }
         return throwError(() => new Error(errorMessage));
-        }
+    }
 }
 
 export interface AuthResponseData { // encrypt password
