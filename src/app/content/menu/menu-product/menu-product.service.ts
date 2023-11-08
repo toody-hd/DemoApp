@@ -1,14 +1,24 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { EventEmitter, Injectable, OnInit } from "@angular/core";
 import { Product } from "./product";
 
 @Injectable()
-export class MenuProductService {
+export class MenuProductService implements OnInit {
     productSelected = new EventEmitter<Product>();
     productChanged = new EventEmitter<Product[]>();
     private products: Product[] = [];
 
+    ngOnInit() {
+        // this.productSelected.subscribe(e => {
+        //     this.getProductsByCategory(e.id)
+        // })
+    }
+
     getProducts() {
         return this.products.slice();
+    }
+
+    getProductsByCategory(category: number) {
+        return this.products.filter(product => product.category === category).slice();
     }
 
     setProducts(products: Product[]) {

@@ -1,5 +1,4 @@
 import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
 import { SharedModule } from "src/app/shared/shared.module";
 import { MenuCategoryComponent } from "./menu-category/menu-category.component";
 import { MenuCategoryService } from "./menu-category/menu-category.service";
@@ -14,8 +13,8 @@ import { MenuComponent } from "./menu.component";
         MenuCategoryComponent,
         MenuProductComponent
     ],
-    imports: [RouterModule, MenuRoutingModule, SharedModule],
-    providers:[MenuCategoryService, MenuProductService]
+    imports: [MenuRoutingModule, SharedModule],
+    providers: [MenuCategoryService, MenuProductService]
 })
 export class MenuModule {
 

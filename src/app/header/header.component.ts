@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  
+
+  loggedin = false;
+
+  constructor(private authSerive: AuthService) { }
+
+  ngOnInit() {
+    this.authSerive.user.subscribe(user => {
+      this.loggedin = !!user;
+    })
+  }
 }

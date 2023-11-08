@@ -1,14 +1,24 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { EventEmitter, Injectable, OnInit } from "@angular/core";
 import { Category } from "./category";
 
 @Injectable()
-export class MenuCategoryService {
+export class MenuCategoryService implements OnInit {
     categorySelected = new EventEmitter<Category>();
     categoryChanged = new EventEmitter<Category[]>();
     private categories: Category[] = [];
 
+    ngOnInit() {
+        // this.categorySelected.subscribe(e => {
+        //     this.getCategoryId(e.name);
+        // })
+    }
+
     getCategories() {
         return this.categories.slice();
+    }
+
+    getCategoryId(category: string) {
+        return this.categories.find(e => e.name.toLocaleLowerCase() === category)?.id;
     }
 
     setCategories(categories: Category[]) {

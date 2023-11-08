@@ -6,7 +6,7 @@ import { AuthComponent } from 'src/app/auth/auth.component';
 
 
 @Component({
-    selector:'app-modal',
+    selector: 'app-modal',
     templateUrl: './modal.component.html',
     styleUrls: ['./modal.component.css']
 })
@@ -20,11 +20,11 @@ export class ModalComponent {
 
     message: string = '';
 
-	constructor(public activeModal: NgbActiveModal) {}
+    constructor(public activeModal: NgbActiveModal) { }
 
     onSubmit(form: NgForm) {
         this.error = '';
-        this.onSubmitData.emit({ 
+        this.onSubmitData.emit({
             functionality: this.functionality,
             data: Object.entries<string>(form.value).map((parameter) => {
                 return { parameter: parameter[0], value: parameter[1] }

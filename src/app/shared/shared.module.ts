@@ -4,21 +4,23 @@ import { FormsModule } from "@angular/forms";
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AlertComponent } from "./alert/alert.component";
+import { CardComponent } from "./card/card.component";
 import { ModalComponent } from "./modal/modal.component";
-import { PlaceholderDirective } from "./placeholder/placeholder.directive";
 import { ToastComponent } from './toast/toast.component';
+import { RouterModule } from "@angular/router";
 
 @NgModule({
     declarations: [
         AlertComponent,
-        PlaceholderDirective,
+        CardComponent,
         ModalComponent,
         ToastComponent
     ],
     imports: [
         FormsModule,
         CommonModule,
-        NgbModule
+        NgbModule,
+        RouterModule
     ],
     providers: [
         ModalComponent,
@@ -27,7 +29,7 @@ import { ToastComponent } from './toast/toast.component';
     ],
     exports: [
         AlertComponent,
-        PlaceholderDirective,
+        CardComponent,
         ModalComponent,
         ToastComponent,
         CommonModule
