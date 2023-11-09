@@ -18,12 +18,16 @@ export class MenuProductService implements OnInit {
     }
 
     getProductsByCategory(category: number) {
-        return this.products.filter(product => product.category === category).slice();
+        return this.products.slice().filter(product => product.category === category);
     }
 
     setProducts(products: Product[]) {
         this.products = products;
         this.productChanged.emit(this.products.slice());
+    }
+
+    getProductByName(name: string) {
+        return this.products.slice().find(product => product.name === name)
     }
 
     getProduct(index: number) {

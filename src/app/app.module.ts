@@ -12,6 +12,7 @@ import { CoreModule } from './core.module';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { SharedModule } from './shared/shared.module';
     FormsModule,
     HttpClientModule,
     MenuModule,
-    SharedModule
+    SharedModule,
+    BrowserAnimationsModule
   ],
   bootstrap: [AppComponent]
 })

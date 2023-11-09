@@ -1,1 +1,26 @@
-<div>Menu Cath details</div>
+<h3>{{name | titlecase}}</h3>
+
+<div class="form-floating">
+    <select class="form-select" id="floatingSelect">
+        <option *ngFor="let category of categories" [selected]="(category.name | lowercase) === selectedCategory">
+            {{category.name}}
+        </option>
+    </select>
+    <label for="floatingSelect">Category</label>
+</div>
+
+<div class="form-floating">
+    <ng-select id="floatingSelect" [items]="ingredients" bindLabel="name" [multiple]="true" [hideSelected]="true"
+        [closeOnSelect]="true" [selectableGroup]="false" [(ngModel)]="selectedIngredients">
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:10">
+                <span class="ng-value-label"> {{ $any(item).name}}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 10">
+                <span class="ng-value-label">{{items.length - 10}} more...</span>
+            </div>
+        </ng-template>
+    </ng-select>
+    <label for="floatingSelect">Ingredients</label>
+</div>

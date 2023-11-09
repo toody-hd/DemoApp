@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { map, tap } from "rxjs";
 import { Category } from "../content/menu/menu-category/category";
 import { MenuCategoryService } from "../content/menu/menu-category/menu-category.service";
+import { Ingredient } from "../content/menu/menu-ingredient/Ingredient";
+import { MenuIngredientService } from "../content/menu/menu-ingredient/menu-ingredient.service";
 import { MenuProductService } from "../content/menu/menu-product/menu-product.service";
 import { Product } from "../content/menu/menu-product/product";
 
@@ -11,7 +13,11 @@ const API_URL = 'http://localhost:3000';
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
 
-    constructor(private http: HttpClient, private menuCategoryService: MenuCategoryService, private menuProductService: MenuProductService) { }
+    constructor(private http: HttpClient,
+        private menuCategoryService: MenuCategoryService,
+        private menuProductService: MenuProductService,
+        private menuIngredientService: MenuIngredientService
+    ) { }
 
     fetchCategories() {
         return this.http.get<Category[]>(API_URL + '/categories')
@@ -21,7 +27,7 @@ export class DataStorageService {
                         return { ...category }
                     });
                 }),
-                tap(categories => {
+                tap((categories: Category[]) => {
                     this.menuCategoryService.setCategories(categories);
                 })
             )
@@ -37,7 +43,7 @@ export class DataStorageService {
     }
 
     fetchProductsByCategory(category: string) {
-        return this.http.get<Product[]>(API_URL + '/categories')
+        return this.http.get<Category[]>(API_URL + '/categories')
             .pipe(
                 map(categories => {
                     return this.http.get<Product[]>(API_URL + '/products').pipe(
@@ -57,7 +63,7 @@ export class DataStorageService {
                         return { ...product }
                     })
                 }),
-                tap(products => {
+                tap((products: Product[]) => {
                     this.menuProductService.setProducts(products);
                 })
             )
@@ -87,6 +93,45 @@ export class DataStorageService {
             )
     }
 
+    fetchIngredients() {
+        return this.http.get<Ingredient[]>(API_URL + '/ingredients')
+            .pipe(
+                map(ingredients => {
+                    return ingredients.map(ingredient => {
+                        return { ...ingredient }
+                    });
+                }),
+                tap((ingredients: Ingredient[]) => {
+                    this.menuIngredientService.setIngredients(ingredients);
+                })
+            )
+    }
+
+    fetchIngredientsByProduct(product: string) {
+        return this.http.get<Product[]>(API_URL + '/products')
+            .pipe(
+                map(products => {
+                    return this.http.get<Ingredient[]>(API_URL + '/ingredients').pipe(
+                        map(ingredients => {
+                            return ingredients.filter(ingr => products.find(prod => prod.name.toLowerCase() === product)!.ingredients.includes(ingr.id!))
+                        })
+                    )
+                })
+            )
+    }
+
+    fetchIngredient(ingredient: string) {
+        return this.http.get<Ingredient[]>(API_URL + '/ingredients')
+            .pipe(
+                map(ingredients => {
+                    return ingredients.find(ingr => ingr.name === ingredient)!
+                }),
+                tap(ingredient => {
+                    this.menuIngredientService.ingredientSelected.emit(ingredient)
+                })
+            )
+    }
+
     storeCategory() {
         const categories = this.menuCategoryService.getCategories();
         this.http.post(API_URL + '/categories', categories)
@@ -98,6 +143,14 @@ export class DataStorageService {
     storeProduct() {
         const products = this.menuProductService.getProducts();
         this.http.post(API_URL + '/products', products)
+            .subscribe(response => {
+                // TO DO
+            })
+    }
+
+    storeIngredient() {
+        const ingredients = this.menuIngredientService.getIngredients();
+        this.http.post(API_URL + '/ingredients', ingredients)
             .subscribe(response => {
                 // TO DO
             })
