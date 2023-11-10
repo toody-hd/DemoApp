@@ -5,7 +5,7 @@ export class User {
         private _password?: string,
         private _token?: string,
         public tokenExpirationDate?: Date
-        ) {}
+    ) { }
 
     get token() {
         if (!this.tokenExpirationDate || new Date() > this.tokenExpirationDate) {
@@ -14,11 +14,7 @@ export class User {
         return this._token;
     }
 
-    get password()  {
+    get password() {
         return this._password; // to be added: encryption
     }
-
-    // set password(password: string | undefined) { // to be removed for security
-    //     this._password = password;
-    // }
 }

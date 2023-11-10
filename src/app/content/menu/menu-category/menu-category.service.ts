@@ -8,9 +8,7 @@ export class MenuCategoryService implements OnInit {
     private categories: Category[] = [];
 
     ngOnInit() {
-        // this.categorySelected.subscribe(e => {
-        //     this.getCategoryId(e.name);
-        // })
+
     }
 
     getCategories() {
@@ -18,7 +16,7 @@ export class MenuCategoryService implements OnInit {
     }
 
     getCategoryId(category: string) {
-        return this.categories.find(e => e.name.toLocaleLowerCase() === category)?.id;
+        return this.categories.find(e => e.name === category)?.id;
     }
 
     setCategories(categories: Category[]) {

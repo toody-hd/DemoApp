@@ -4,9 +4,6 @@ import { ContentComponent } from './content/content.component';
 
 const appRoutes: Routes = [
   { path: '', component: ContentComponent }
-  //{ path: '', redirectTo: '/menu', pathMatch: 'full' },
-  // { path: '', component:  ContentComponent},
-  // { path: 'menu', component: MenuComponent, canActivate:[AuthGuard] }
 ];
 
 @NgModule({

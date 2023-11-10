@@ -8,9 +8,7 @@ export class MenuProductService implements OnInit {
     private products: Product[] = [];
 
     ngOnInit() {
-        // this.productSelected.subscribe(e => {
-        //     this.getProductsByCategory(e.id)
-        // })
+
     }
 
     getProducts() {

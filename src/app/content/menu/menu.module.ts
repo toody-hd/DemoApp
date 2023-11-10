@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { SharedModule } from "src/app/shared/shared.module";
 import { MenuCategoryDetailsComponent } from "./menu-category/menu-category-details/menu-category-details.component";
@@ -18,7 +18,7 @@ import { MenuComponent } from "./menu.component";
         MenuProductComponent,
         MenuCategoryDetailsComponent
     ],
-    imports: [MenuRoutingModule, NgSelectModule, FormsModule, SharedModule],
+    imports: [MenuRoutingModule, NgSelectModule, FormsModule, ReactiveFormsModule, SharedModule],
     providers: [MenuCategoryService, MenuProductService, MenuIngredientService]
 })
 export class MenuModule {

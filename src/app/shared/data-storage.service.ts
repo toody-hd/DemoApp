@@ -48,7 +48,7 @@ export class DataStorageService {
                 map(categories => {
                     return this.http.get<Product[]>(API_URL + '/products').pipe(
                         map(products => {
-                            return products.filter(prod => prod.category === categories.find(cat => cat.name.toLowerCase() === category)!.id)
+                            return products.filter(prod => prod.category === categories.find(cat => cat.name === category)!.id)
                         })
                     )
                 })
@@ -113,7 +113,7 @@ export class DataStorageService {
                 map(products => {
                     return this.http.get<Ingredient[]>(API_URL + '/ingredients').pipe(
                         map(ingredients => {
-                            return ingredients.filter(ingr => products.find(prod => prod.name.toLowerCase() === product)!.ingredients.includes(ingr.id!))
+                            return ingredients.filter(ingr => products.find(prod => prod.name === product)!.ingredients.includes(ingr.id!))
                         })
                     )
                 })

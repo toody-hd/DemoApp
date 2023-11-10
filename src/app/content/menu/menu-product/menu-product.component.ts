@@ -22,7 +22,6 @@ export class MenuProductComponent implements OnInit {
       )
     this.activatedRoute.data.subscribe(
       ({ products }) => {
-        //console.log(products)
         this.products = products;
       });
   }

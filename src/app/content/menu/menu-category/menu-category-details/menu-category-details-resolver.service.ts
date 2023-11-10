@@ -1,43 +1,43 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular/router";
-import { forkJoin, of, switchMap } from "rxjs";
+import { forkJoin, map, of, switchMap } from "rxjs";
 import { DataStorageService } from "src/app/shared/data-storage.service";
 import { Ingredient } from "../../menu-ingredient/Ingredient";
 import { MenuIngredientService } from "../../menu-ingredient/menu-ingredient.service";
 import { Category } from "../category";
 import { MenuCategoryService } from "../menu-category.service";
+import { MenuProductService } from "../../menu-product/menu-product.service";
 
 export const MenuCategoryDetailsResolver: ResolveFn<{ categories: Category[], ingredients: Ingredient[] }> = (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) => {
-
     return forkJoin({
+        id: getproductId(),
         name: of(route.params['product']),
         categories: getCategories(),
         category: of(route.params['category']),
         ingredientsList: getIngredients(),
         ingredients: getProductIngredients()
-        //products: getproducts(),
     });
 
     function getCategories() {
         const categories = inject(MenuCategoryService).getCategories();
         if (categories.length === 0) {
             return inject(DataStorageService).fetchCategories();
-            //.pipe<Category[]>(map(e => { getSelectedCategory(e); return e }));
         } else {
             return of(categories);
         }
     }
 
-    // function getproducts() {
-    //     const products = inject(MenuProductService).getProductByName(route.params['product']);
-    //     if (products) {
-    //         return inject(DataStorageService).fetchProduct(route.params['product']);
-    //     } else {
-    //         return of(products);
-    //     }
-    // }
+    function getproductId() {
+        const product = inject(MenuProductService).getProductByName(route.params['product']);
+        if (!product) {
+            return inject(DataStorageService).fetchProduct(route.params['product'])
+                .pipe(map(e => e.id));
+        } else {
+            return of(product.id);
+        }
+    }
 
     function getIngredients() {
         const ingredients = inject(MenuIngredientService).getIngredients();

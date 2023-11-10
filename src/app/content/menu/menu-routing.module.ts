@@ -11,8 +11,8 @@ import { MenuComponent } from "./menu.component";
 
 const routes: Routes = [
     { path: 'menu', component: MenuComponent, title: 'Menu', resolve: { categories: MenuCategoryResolver }, canActivate: [AuthGuard] },
-    { path: 'menu/:category', component: MenuProductComponent, resolve: { products: MenuProductResolver } },
-    { path: 'menu/:category/:product', component: MenuCategoryDetailsComponent, resolve: { details: MenuCategoryDetailsResolver } },
+    { path: 'menu/:category', component: MenuProductComponent, resolve: { products: MenuProductResolver }, canActivate: [AuthGuard] },
+    { path: 'menu/:category/:product', component: MenuCategoryDetailsComponent, resolve: { details: MenuCategoryDetailsResolver }, canActivate: [AuthGuard] },
     { path: '**', pathMatch: 'full', component: NotFoundComponent }
 ]
 

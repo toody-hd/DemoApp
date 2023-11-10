@@ -89,7 +89,6 @@ export class AuthComponent implements OnInit, OnDestroy {
             this.authService.error.subscribe(error => {
               this.error.emit(error);
             });
-            //this.router.navigate(['/']);
             this.showLoginToast = true;
             this.showLogoutToast = false;
           },

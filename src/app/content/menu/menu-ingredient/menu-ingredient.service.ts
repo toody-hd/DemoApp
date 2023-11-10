@@ -8,9 +8,7 @@ export class MenuIngredientService implements OnInit {
     private ingredients: Ingredient[] = [];
 
     ngOnInit() {
-        // this.categorySelected.subscribe(e => {
-        //     this.getCategoryId(e.name);
-        // })
+
     }
 
     getIngredients() {
