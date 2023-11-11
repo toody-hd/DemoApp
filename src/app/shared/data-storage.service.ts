@@ -155,4 +155,11 @@ export class DataStorageService {
                 // TO DO
             })
     }
+
+    updateProduct(productId: string, partialProduct: Partial<Product>) {
+        this.http.patch(API_URL + `/products/${productId}`, partialProduct)
+            .subscribe(response => {
+                // TO DO
+            })
+    }
 }

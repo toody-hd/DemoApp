@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, map } from 'rxjs';
 import { Card } from 'src/app/shared/card/card';
 import { MenuProductService } from './menu-product.service';
 
@@ -9,20 +10,12 @@ import { MenuProductService } from './menu-product.service';
   styleUrls: ['./menu-product.component.css']
 })
 export class MenuProductComponent implements OnInit {
-  products: Card[] = [];
+  products$: Observable<Card[]> = new Observable;
 
   constructor(private menuProductService: MenuProductService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.menuProductService.productChanged
-      .subscribe(
-        (products: Card[]) => {
-          this.products = products;
-        }
-      )
-    this.activatedRoute.data.subscribe(
-      ({ products }) => {
-        this.products = products;
-      });
+    this.products$ = this.menuProductService.productChanged;
+    this.products$ = this.activatedRoute.data.pipe(map(({ products }) => products));
   }
 }

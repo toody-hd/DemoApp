@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Ingredient } from "../../menu-ingredient/Ingredient";
-import { MenuIngredientService } from "../../menu-ingredient/menu-ingredient.service";
+import { Observable, map } from "rxjs";
+import { symmetricDiff } from "src/app/helper/diff";
+import { DataStorageService } from "src/app/shared/data-storage.service";
+import { MenuProductService } from "../../menu-product/menu-product.service";
 import { Product } from "../../menu-product/product";
-import { Category } from "../category";
 import { ProductDetail } from "./productDetail";
 
 @Component({
@@ -15,19 +16,17 @@ import { ProductDetail } from "./productDetail";
 
 export class MenuCategoryDetailsComponent implements OnInit, AfterViewInit {
 
-    id: number = -1;
-    name: string = 'Prod Name';
-    categories: Category[] = [];
-    ingredients: Ingredient[] = [];
-    selectedCategory: string = 'Side';
-    selectedIngredients = [{ name: 'Tomatoes' }];
-    modified = false;
+    data$: Observable<any> = new Observable;
+    productId: string = '';
+    modified: boolean = false;
     changes: Partial<Product> = {};
+    initialState!: ProductDetail
 
     form!: FormGroup;
 
     constructor(
-        private menuCategoryService: MenuIngredientService,
+        private menuProductService: MenuProductService,
+        private dataStorageService: DataStorageService,
         private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder
     ) {
@@ -35,66 +34,61 @@ export class MenuCategoryDetailsComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.menuCategoryService.ingredientChanged
-            .subscribe(
-                (ingredients: Ingredient[]) => {
-                    this.ingredients = ingredients;
-                }
-            )
-        this.activatedRoute.data.subscribe(
-            ({ details }) => {
-                this.id = details.id;
-                this.name = details.name;
-                this.selectedIngredients = details.ingredients;
-                this.selectedCategory = details.category;
-                this.categories = details.categories;
-                this.ingredients = details.ingredientsList;
-
-                this.form = this.formBuilder.group({
-                    'name': [this.name, [Validators.required]],
-                    'selectedIngredients': [this.selectedIngredients, [Validators.required]],
-                    'selectedCategory': [this.selectedCategory, [Validators.required]],
-                    'categories': [this.categories, [Validators.required]],
-                    'ingredients': [this.ingredients, [Validators.required]],
-                });
-            });
+        this.data$ = this.activatedRoute.data
+            .pipe(
+                map(
+                    ({ details }) => {
+                        this.productId = details.id;
+                        this.form = this.formBuilder.group({
+                            'name': [details.name, [Validators.required]],
+                            'selectedIngredients': [details.ingredients, [Validators.required]],
+                            'selectedCategory': [String(details.category.id), [Validators.required]],
+                            'categories': [details.categories, [Validators.required]],
+                            'ingredients': [details.ingredientsList, [Validators.required]],
+                        });
+                        return details;
+                    }
+                )
+            );
     }
 
     ngAfterViewInit() {
-        const initialState: ProductDetail = this.form.value;
+        this.initialState = this.form.value;
         this.form.valueChanges.subscribe((data: ProductDetail) => {
             let changes: Partial<ProductDetail> = {};
             Object.entries(data)
                 .filter(([key, value]: [string, string | [{ id: number, name: string }]]) => {
                     if (typeof value === 'string') {
-                        return value !== initialState[key as keyof typeof initialState];
+                        return value !== this.initialState[key as keyof typeof this.initialState];
                     } else {
-                        return (initialState[key as keyof typeof initialState] as [{ id: number, name: string }])
-                            .filter(({ name }) =>
-                                !value.map(({ name }) => name).includes(name))
-                                .concat(value
-                                    .filter(({ name })=> 
-                                        !(initialState[key as keyof typeof initialState] as [{ id: number, name: string }])
-                                            .map(({ name })=> name).includes(name)))
-                                .length > 0;
+                        const initValues = (this.initialState[key as keyof typeof this.initialState] as [{ id: number, name: string }]).map(({ name }) => name);
+                        const modValues = value.map(({ name }) => name);
+                        return symmetricDiff(initValues, modValues).length > 0;
                     }
                 })
                 .map(([key, value]) => { changes = { ...changes, [key]: value }; });
-            this.changes = Object.entries(changes).length > 0 ? this.productDetailToProduct(changes) : {};
+            this.changes =
+                Object.entries(changes).length > 0 ?
+                    this.productDetailToProduct(changes) :
+                    {};
             this.modified = Object.entries(this.changes).length > 0;
         })
     }
 
     onSubmitForm() {
-        console.log('submit', this.changes);
+        this.menuProductService.getProducts().length ?
+            this.menuProductService.updateProduct(+this.productId, this.changes) :
+            this.dataStorageService.updateProduct(this.productId, this.changes);
+        this.initialState = this.form.value;
+        this.modified = false;
+        this.changes = {};
     }
 
-    productDetailToProduct(productDetail: Partial<ProductDetail>): Product {
-        return {
-            id: this.id,
-            name: productDetail.name ? productDetail.name : this.name,
-            category: productDetail.selectedCategory ? this.categories.find(e => productDetail.selectedCategory === e.name)!.id : this.categories.find(e => this.selectedCategory === e.name)!.id,
-            ingredients: productDetail.selectedIngredients ? this.ingredients.filter(({ name }) => productDetail.selectedIngredients!.map(x => x.name).includes(name)).map(i => i.id) : this.ingredients.filter(({ name }) => this.selectedIngredients.map(x => x.name).includes(name)).map(i => i.id)
-        }
+    productDetailToProduct({ name, selectedCategory, selectedIngredients }: Partial<ProductDetail>): Partial<Product> {
+        let prod: Partial<Product> = {};
+        name && (prod.name = name);
+        selectedCategory && (prod.category = +selectedCategory);
+        selectedIngredients && (prod.ingredients = selectedIngredients.map(({ id }) => id));
+        return { ...prod }
     }
 }

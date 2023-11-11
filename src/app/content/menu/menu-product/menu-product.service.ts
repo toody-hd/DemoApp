@@ -37,8 +37,10 @@ export class MenuProductService implements OnInit {
         this.productChanged.emit(this.products.slice());
     }
 
-    updateProduct(index: number, newProduct: Product) {
-        this.products[index] = newProduct;
+    updateProduct(index: number, updates: Partial<Product>) {
+        console.log('prods', this.products)
+        console.log('this prod', this.products[index])
+        this.products[index] = { ...this.products[index], ...updates };
         this.productChanged.emit(this.products.slice());
     }
 

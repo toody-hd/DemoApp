@@ -4,7 +4,10 @@ export interface ProductDetail {
         id: number;
         name: string;
     }],
-    selectedCategory: string,
+    selectedCategory: {
+        id: number;
+        name: string;
+    },
     categories: [{
         id: number;
         name: string;
